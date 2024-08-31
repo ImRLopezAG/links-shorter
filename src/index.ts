@@ -65,7 +65,3 @@ serve({
   port: PORT
 })
 
-const validateUrl = (url: string) => {
-  const urlRegex = /^(http|https):\/\/[^ "]+$/
-  return urlRegex.test(url)
-}

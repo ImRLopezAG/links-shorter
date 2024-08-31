@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid'
 import { db, shorter } from './db'
 
 export const service = () => ({
-  async createShorter(url: string, hostUrl: string) {
+  async createShorter(url: string, hostUrl: URL | string) {
     const slug = nanoid(8)
     return await db
       .insert(shorter)
