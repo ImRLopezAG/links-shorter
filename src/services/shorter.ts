@@ -1,10 +1,9 @@
+import { db, shorter } from '@/db'
 import { eq } from 'drizzle-orm'
-import { nanoid } from 'nanoid'
-import { db, shorter } from './db'
-
+import { createHash } from 'node:crypto'
 export const service = () => ({
   async createShorter(url: string, hostUrl: URL | string) {
-    const slug = nanoid(8)
+    const slug = createHash('md5').update(url).digest('hex').substring(0, 8);
     return await db
       .insert(shorter)
       .values({
