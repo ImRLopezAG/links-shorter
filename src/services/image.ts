@@ -1,4 +1,7 @@
+import { db, images } from '@/db'
 import sharp from 'sharp'
+import { tryAsync } from 'try-handler'
+import * as shorter from './shorter'
 
 interface ImageProps {
   width: number
@@ -7,13 +10,40 @@ interface ImageProps {
   file: string
 }
 
+interface Image {
+  imageBuffer: Buffer
+  hostUrl: string
+}
+
 export const service = () => ({
   async optimizeImage({ width, height, quality, file }: ImageProps) {
     const fileBuffer = Buffer.from(file, 'base64')
     const convert = sharp(fileBuffer)
       .resize({ width, height, fit: 'inside' })
       .toFormat('webp', { quality, lossless: false })
-
     return await convert.toBuffer()
+  },
+  async saveImage({ imageBuffer, hostUrl }: Image) {
+    const data = imageBuffer.toString('base64')
+    const url = `data:image/webp;base64,${data}`
+    const [error, short_url] = await tryAsync(() =>
+      shorter.service().createShorter(url, hostUrl)
+    )
+    console.log(error, short_url)
+    if (error || !short_url) throw new Error('Failed to save image on shorter')
+    const short = short_url[0]
+    if (!short) throw new Error('Failed to save image on read model')
+
+    const [insertError] = await tryAsync(() =>
+      db.insert(images).values({
+        url: short.short || '',
+        data,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      })
+    )
+    if (insertError) throw new Error('Failed to save image on write model')
+
+    return short.short || ''
   }
 })
