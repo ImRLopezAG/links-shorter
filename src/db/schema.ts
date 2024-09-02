@@ -15,3 +15,11 @@ export const shorter = sqliteTable(
     urlIdx: index('url_idx').on(table.url)
   })
 )
+
+export const images = sqliteTable('images', {
+  id: integer('id').primaryKey(),
+  url: text('url').notNull().unique(),
+  data: text('data').notNull(),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull()
+})
