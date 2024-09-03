@@ -1,12 +1,13 @@
 import { index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
+import { relations } from 'drizzle-orm'
+
 export const shorter = sqliteTable(
   'shorter',
   {
     id: integer('id').primaryKey(),
     url: text('url').notNull().unique(),
     slug: text('slug').notNull().unique(),
-    shortUrl: text('short_url'),
     createdAt: text('created_at').notNull(),
     updatedAt: text('updated_at').notNull()
   },
@@ -18,8 +19,17 @@ export const shorter = sqliteTable(
 
 export const images = sqliteTable('images', {
   id: integer('id').primaryKey(),
-  url: text('url').notNull().unique(),
+  slug: text('slug')
+    .notNull()
+    .references(() => shorter.slug),
   data: text('data').notNull(),
   createdAt: text('created_at').notNull(),
   updatedAt: text('updated_at').notNull()
 })
+
+export const slugImages = relations(shorter, ({ one }) => ({
+  images: one(images, {
+    fields: [shorter.slug],
+    references: [images.slug]
+  })
+}))
