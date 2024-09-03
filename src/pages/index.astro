@@ -1,8 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import AstroLogo from '@components/icons/astro.astro';
-
-
 ---
 
 <Layout title="Welcome to shurl">
@@ -13,7 +11,12 @@ import AstroLogo from '@components/icons/astro.astro';
 			<input type="text" id="url" placeholder="Enter your URL" name="url" />
 			<button id="shorten">Shorten</button>
 		</div>
-		<img src="/api/image/y-wTDH" alt="Shorten your URL" style="width: 100%; margin-top: 2rem;" />
+
+		<p class="text-gray"> Shurl is a simple URL shortener that allows you to shorten your long URLs into a shorter version and image optimization service that allows you to optimize your images for the web, which helps in reducing the size of the image without losing the quality of the image.</p>
+
+		<p class="text-gray">Shurl is built with Astro, a modern static site generator that allows you to build faster websites with less JavaScript. </p>
+
+		<p class="warning">WARNING: This is a demo project and the shortened URLs are stored in a sqlite database and data can be lost at any time. </p>
 	</main>
 </Layout>
 
@@ -65,7 +68,7 @@ import AstroLogo from '@components/icons/astro.astro';
 		margin-bottom: 1em;
 	}
 	.text-gradient {
-		background-image: var(--accent-gradient);
+		background-image: var(--gradiant-blue);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		background-size: 400%;
@@ -96,5 +99,15 @@ import AstroLogo from '@components/icons/astro.astro';
 			border-radius: 0.5rem;
 		}
 	}
+
+	.warning {
+		color: #90882e;
+		font-size: 1.5rem;
+	}
 	
+	.text-gray {
+		color: #7d7a7a;
+		font-size: 1rem;
+		text-wrap: pretty;
+	}
 </style>

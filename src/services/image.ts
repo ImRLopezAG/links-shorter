@@ -24,7 +24,7 @@ export const service = () => ({
   },
   async saveImage({ imageBuffer }: Image) {
     const data = imageBuffer.toString('base64')
-    const url = `data:image/webp;base64,${data}`
+    const url = `data:image/webp;base64,${data.split('//')[1]}`
     const [error, short_url] = await tryAsync(() =>
       shorter.service().createShorter(url)
     )
