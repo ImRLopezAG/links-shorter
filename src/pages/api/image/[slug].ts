@@ -3,7 +3,7 @@ import type { APIRoute } from 'astro'
 import { tryAsync } from 'try-handler'
 export const prerender = false
 
-export const GET: APIRoute = async ({ params, redirect }) => {
+export const GET: APIRoute = async ({ params }) => {
   const { slug } = params
   if (!slug) {
     return new Response(JSON.stringify({ error: 'Slug not found' }), {
@@ -13,7 +13,9 @@ export const GET: APIRoute = async ({ params, redirect }) => {
       }
     })
   }
-  const [error, data] = await tryAsync(() => service().findShorterBySlug(slug))
+  const [error, data] = await tryAsync(() =>
+    service().getShorterWithImages(slug)
+  )
   if (error) {
     return new Response(JSON.stringify({ error: error.message }), {
       status: 401,
@@ -30,6 +32,21 @@ export const GET: APIRoute = async ({ params, redirect }) => {
       }
     })
   }
+  const { images } = data
+  if (!images) {
+    return new Response(JSON.stringify({ error: 'Image not found' }), {
+      status: 404,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+  }
 
-  return redirect(data.url)
+  const buffer = Buffer.from(images.data, 'base64')
+  return new Response(buffer, {
+    status: 200,
+    headers: {
+      'Content-Type': 'image/webp'
+    }
+  })
 }
