@@ -12,7 +12,6 @@ interface ImageProps {
 
 interface Image {
   imageBuffer: Buffer
-  hostUrl: string
 }
 
 export const service = () => ({
@@ -23,20 +22,19 @@ export const service = () => ({
       .toFormat('webp', { quality, lossless: false })
     return await convert.toBuffer()
   },
-  async saveImage({ imageBuffer, hostUrl }: Image) {
+  async saveImage({ imageBuffer }: Image) {
     const data = imageBuffer.toString('base64')
     const url = `data:image/webp;base64,${data}`
     const [error, short_url] = await tryAsync(() =>
-      shorter.service().createShorter(url, hostUrl)
+      shorter.service().createShorter(url)
     )
-    console.log(error, short_url)
     if (error || !short_url) throw new Error('Failed to save image on shorter')
     const short = short_url[0]
     if (!short) throw new Error('Failed to save image on read model')
 
     const [insertError] = await tryAsync(() =>
       db.insert(images).values({
-        url: short.short || '',
+        slug: short.short || '',
         data,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
