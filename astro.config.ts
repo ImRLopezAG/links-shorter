@@ -2,6 +2,18 @@ import vercel from '@astrojs/vercel/serverless'
 import { defineConfig } from 'astro/config'
 // https://astro.build/config
 export default defineConfig({
-  output: 'server',
-  adapter: vercel()
+  build: {
+    inlineStylesheets: 'always'
+  },
+  compressHTML: true,
+  prefetch: true,
+  devToolbar: {
+    enabled: false
+  },
+  adapter: vercel({
+    webAnalytics: {
+      enabled: true
+    }
+  }),
+  output: 'server'
 })
