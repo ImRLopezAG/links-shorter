@@ -1,5 +1,5 @@
 import { type Config } from 'drizzle-kit'
-import { env } from 'node:process' 
+import { env } from 'node:process'
 export default {
   schema: './src/db/schema.ts',
   dialect: 'sqlite',
