@@ -1,6 +1,7 @@
 import { db, shorter } from '@/db'
 import { eq } from 'drizzle-orm'
 import { nanoid } from 'nanoid'
+
 export const service = () => ({
   async createShorter(url: string) {
     const slug = nanoid(6)
