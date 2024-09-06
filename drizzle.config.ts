@@ -4,6 +4,7 @@ export default {
   schema: './src/db/schema.ts',
   dialect: 'postgresql',
   dbCredentials: {
-    url: env.DATABASE_URL || 'postgres://user:pass@localhost:5432/db'
+    url: env.DB_URL || 'postgres://user:pass@localhost:5432/db',
+    ssl: true,
   }
 } satisfies Config
