@@ -1,10 +1,11 @@
-import Database from 'better-sqlite3'
-import { drizzle } from 'drizzle-orm/better-sqlite3'
+import { drizzle } from 'drizzle-orm/node-postgres'
 import { env } from 'node:process'
+import { Client } from 'pg'
 import * as schema from './schema'
 
-const dbUrl = './db.sqlite'
+const connectionString =
+  env.DATABASE_URL || 'postgres://user:pass@localhost:5432/db'
 
-export const client = new Database(dbUrl)
+const client = new Client({ connectionString })
 
 export const db = drizzle(client, { schema })

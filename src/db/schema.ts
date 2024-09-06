@@ -1,11 +1,11 @@
-import { index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { index, pgTable, text, serial } from 'drizzle-orm/pg-core'
 
 import { relations } from 'drizzle-orm'
 
-export const shorter = sqliteTable(
+export const shorter = pgTable(
   'shorter',
   {
-    id: integer('id').primaryKey(),
+    id: serial('id').primaryKey(),
     url: text('url').notNull().unique(),
     slug: text('slug').notNull().unique(),
     createdAt: text('created_at').notNull(),
@@ -17,8 +17,8 @@ export const shorter = sqliteTable(
   })
 )
 
-export const images = sqliteTable('images', {
-  id: integer('id').primaryKey(),
+export const images = pgTable('images', {
+  id: serial('id').primaryKey(),
   slug: text('slug')
     .notNull()
     .references(() => shorter.slug),
