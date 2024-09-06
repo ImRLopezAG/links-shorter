@@ -2,9 +2,8 @@ import { type Config } from 'drizzle-kit'
 import { env } from 'node:process'
 export default {
   schema: './src/db/schema.ts',
-  dialect: 'sqlite',
+  dialect: 'postgresql',
   dbCredentials: {
-    url: env.DB_URL ?? 'file:./src/db/db.sqlite'
-  },
-  tablesFilter: ['translations_*']
+    url: env.DATABASE_URL || 'postgres://user:pass@localhost:5432/db'
+  }
 } satisfies Config
