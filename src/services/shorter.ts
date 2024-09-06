@@ -33,10 +33,9 @@ export const service = () => ({
         updatedAt: new Date().toISOString()
       })
       .where(eq(shorter.slug, slug))
-      .run()
   },
   async deleteShorter(slug: string) {
-    return await db.delete(shorter).where(eq(shorter.slug, slug)).run()
+    return await db.delete(shorter).where(eq(shorter.slug, slug))
   },
   async listShorter() {
     return await db.query.shorter.findMany()
